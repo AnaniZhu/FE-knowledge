@@ -32,6 +32,8 @@
     - `CSS` 放页面顶部，`Script` 放页面底部
     - `CSS` 选择器嵌套层级不要太深
     - 事件委托 （减少内存）
+    - 节流、防抖
+    - `web-worker` 处理 CPU 密集型任务
 4. 减少回流与重绘
     - `DOM` 部分 API (`offsetXXX` `clientXXX` `scrollXXX` `getComputedStyle` `getBoundingClientRect` ...) 结果多用变量存储缓存，防止每次调用触发强制渲染
     - 大量样式修改尽量采用移除/添加类名的方法，避免 `style` 逐个修改
@@ -54,6 +56,30 @@
 - `style.width/height`
 - `getComputedStyle`
 - `getBoundingClientRect`
+
+
+
+### 框架代码的优化
+
+> 除了上述优化之外的
+
+#### Vue
+
+- 不需要响应式的数据通过 `Object.freeze` 或者在 `created` 钩子之后 `this.xxx` 赋值属性
+- `v-once`
+- 合理利用 `key` 值
+- 根据需求正确使用 `v-show` 和 `v-if`
+- `keep-alive`
+
+#### React
+
+- `shouldComponentUpdate`
+
+- `PureComponent`
+
+- 避免内联函数，采用 `useCallback` & `useMemo`
+
+  
 
 ### 白屏时间 & 首屏时间
 
@@ -229,7 +255,7 @@
 - `Content-Language`
 - `Content-Type`
     - `application/x-www-form-urlencoded`
-    - `application/plain`
+    - `text/plain`
     - `multipart/form-data`
 - `DPR`
 - `Downlink`

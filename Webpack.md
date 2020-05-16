@@ -5,7 +5,7 @@
 - 静态资源压缩
 - 小图片内联Base64
 - ES6 `tree-shaking`
-- 多线程打包
+- 多进程打包
 - 利用 loader 缓存
 - `dll`
 - 代码分割懒加载
@@ -18,7 +18,7 @@
   - 每次打包采用一个 `hash`
 - `chunkHash`
   - 每一个 `chunk` 一个 hash
-- `ContentHash`
+- `contentHash`
   - 根据文件内容生成的 `hash`。每个文件不一样。
 
 

@@ -18,6 +18,6 @@
 
 - [Typescript 英文文档](https://www.typescriptlang.org/docs/handbook/basic-types.html)
 - [Typescript 中文文档](https://www.tslang.cn/docs/handbook/basic-types.html)
-- [深入理解 TypeScript]([https://jkchao.github.io/typescript-book-chinese/tips/infer.html#leetcode-%E7%9A%84%E4%B8%80%E9%81%93-typescript-%E9%9D%A2%E8%AF%95%E9%A2%98](https://jkchao.github.io/typescript-book-chinese/tips/infer.html#leetcode-的一道-typescript-面试题))
+- [深入理解 TypeScript](https://jkchao.github.io/typescript-book-chinese/tips/infer.html#leetcode-的一道-typescript-面试题)
 - [Typescript 建议](https://juejin.im/post/5e7c08bde51d455c4c66ddad#heading-26)
 
