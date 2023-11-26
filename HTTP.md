@@ -304,7 +304,51 @@ A: 当客户端向服务端发送 `FIN` 表示需要断开连接时，服务端�
     - 不做限制
     - 只有 `https` 的请求才支持 `none` 值
 
+### Websocket 是什么？
+衍生问题：
+1. 解决了什么问题？
+2. 还有哪些服务端主动推送的能力？
+3. 怎么建立链接的？
+4. 心跳
+5. 鉴权
 
+[一文吃透 WebSocket 原理 刚面试完，趁热赶紧整理 - 掘金](https://juejin.cn/post/7020964728386093093?searchId=2023112616320663527496DE55BF2F54E7)
+
+[WebSocket 教程 - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2017/05/websocket.html)
+
+websocket 是什么?
+Websocket 是一种基于 TCP 的全双工通信协议，允许客户端、服务端主动推送消息。只有建立连接时是采用 http 协议，后续数据传输都与 http 协议无关。
+
+服务端主动推送的能力
+除 Websocket 之外，服务端主动推送内容有两种方式：
+1. 轮询。缺点：增大了服务器的压力（QPS 太大）、浪费网络资源（太多冗余的内容，请求头等）
+2. 长轮询。缺点：长时间不响应，占用 TCP 数量，得不到释放
+3. HTTP2 Server Push。缺点：只能推送资源，不能推送其他内容
+  1. Chrome 106或之后的版本，将默认禁止服务器推送，因为没有明显的性能提升，在很多情况下反而会导致性能下降。https://developer.chrome.com/en/blog/removing-push/
+
+websocket 的优势
+1. 建立在 TCP 协议之上，服务器端的实现比较容易。
+2. 与 HTTP 协议有着良好的兼容性。默认端口也是80和443，并且握手阶段采用 HTTP 协议，因此握手时不容易屏蔽，能通过各种 HTTP 代理服务器。
+3. 数据格式比较轻量，性能开销小，通信高效。
+4. 可以发送文本，也可以发送二进制数据。
+5. 没有同源限制，客户端可以与任意服务器通信。
+6. 协议标识符是ws（如果加密，则为wss），服务器网址就是 URL。
+缺点：
+1. 少部分浏览器不支持，或者支持度有限（但在现代浏览器下已经都支持了）
+
+websocket 建立连接的顺序
+1. 客户端请求升级协议：客户端发送一个 HTTP 请求，请求头中携带 Upgrade: websocket 表明要升级协议，同时指定 websocket 协议的类型和版本，再带上一个客户端随机生成的 key
+2. 服务端同意升级协议：服务端响应 101 switch Protoca 状态码，表示升级成功，响应头包含本次升级的协议类型和版本号，以及服务端的 key（这个 key 应该是基于客户端传输的 key 加密过后的）
+3. 发送数据：客户端收到连接成功的消息后，双方开始借助于TCP传输信道进行通信。每条消息可以拆成多个数据帧进行传输，提高传输效率
+
+心跳是什么？解决什么问题？
+通过心跳机制判断客户端或服务端是否还在线，如果发现对方离线，那自己也断开连接，释放资源。
+心跳本质就是客户端定时向服务端发送一个 ping 消息，服务端接收后返回 pong 消息。如果达到超时时间还没有响应，则视作对方断开连接。
+
+Websocket怎么做身份认证？
+在握手的时候，给请求链接里追加一些参数、请求头 cookie/token，用于鉴权
+
+[WebSocket 鉴权指南](https://apifox.com/apiskills/websocket-authentication-guide/)
 
 
 ## 参考链接
@@ -319,4 +363,7 @@ A: 当客户端向服务端发送 `FIN` 表示需要断开连接时，服务端�
 - [(建议收藏)TCP协议灵魂之问，巩固你的网路底层基础](https://juejin.im/post/5e527c58e51d4526c654bf41)
 - [HTTP/2 头部压缩技术介绍](https://imququ.com/post/header-compression-in-http2.html)
 - [HPACK: HTTP/2 里的沉默杀手（新特性）](https://www.zcfy.cc/article/hpack-the-silent-killer-feature-of-http-2-1969.html)
+- [一文吃透 WebSocket 原理 刚面试完，趁热赶紧整理 - 掘金](https://juejin.cn/post/7020964728386093093?searchId=2023112616320663527496DE55BF2F54E7)
+- [WebSocket 教程 - 阮一峰的网络日志](https://www.ruanyifeng.com/blog/2017/05/websocket.html)
+- [WebSocket 鉴权指南](https://apifox.com/apiskills/websocket-authentication-guide/)
 
